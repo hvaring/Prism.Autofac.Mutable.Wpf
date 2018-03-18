@@ -22,6 +22,9 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("896de40c-8f6c-4fe7-a540-af60d1873647")]
 
+// Tests
+[assembly: InternalsVisibleTo("Prism.Autofac.Mutable.Wpf.Tests")]
+
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

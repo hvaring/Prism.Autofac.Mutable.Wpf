@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prism.Autofac.Mutable.Wpf", "Prism.Autofac.Mutable.Wpf\Prism.Autofac.Mutable.Wpf.csproj", "{896DE40C-8F6C-4FE7-A540-AF60D1873647}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B4C78CF0-3656-4D63-9432-E8D0616EF6D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prism.Autofac.Mutable.Wpf.Tests", "Tests\Prism.Autofac.Mutable.Wpf.Tests\Prism.Autofac.Mutable.Wpf.Tests.csproj", "{1493D219-0117-4A96-8D06-722223D13793}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{896DE40C-8F6C-4FE7-A540-AF60D1873647}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{896DE40C-8F6C-4FE7-A540-AF60D1873647}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{896DE40C-8F6C-4FE7-A540-AF60D1873647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1493D219-0117-4A96-8D06-722223D13793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1493D219-0117-4A96-8D06-722223D13793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1493D219-0117-4A96-8D06-722223D13793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1493D219-0117-4A96-8D06-722223D13793}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1493D219-0117-4A96-8D06-722223D13793} = {B4C78CF0-3656-4D63-9432-E8D0616EF6D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {353CA245-A501-4F71-886D-193703E323A8}
