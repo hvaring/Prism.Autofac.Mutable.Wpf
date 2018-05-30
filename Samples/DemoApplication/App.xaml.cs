@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Prism.Autofac.Mutable.Wpf;
 using Prism.Ioc;
+using Prism.Modularity;
 using Prism.Mvvm;
 
 namespace DemoApplication
@@ -38,6 +39,13 @@ namespace DemoApplication
                 return Type.GetType(viewModelName);
             });
             base.ConfigureViewModelLocator();
+        }
+
+        protected override IModuleCatalog CreateModuleCatalog()
+        {
+            var testModuleType = typeof(TestModule);
+            return new ModuleCatalog(new[]
+                {new ModuleInfo(testModuleType.Name, testModuleType.AssemblyQualifiedName)});
         }
     }
 }

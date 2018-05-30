@@ -9,8 +9,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="This is the demo view" 
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center" />
+        <StackPanel VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="This is the demo view" />
+            <TextBlock Text="{Binding Number, StringFormat={}The number is: {0}}" />
+        </StackPanel>
+
     </Grid>
 </UserControl>
