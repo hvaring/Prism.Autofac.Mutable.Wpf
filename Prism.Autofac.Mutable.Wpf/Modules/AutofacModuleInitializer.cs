@@ -35,6 +35,7 @@ namespace Prism.Autofac.Mutable.Wpf.Modules
                     {
                         var registry = new AutofacContainerRegistry(builder);
                         moduleInstance.RegisterTypes(registry);
+                        registry.FinalizeRegistry();
                     });
                     
                     moduleInstance.OnInitialized(_containerExtension);

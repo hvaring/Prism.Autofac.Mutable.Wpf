@@ -2,23 +2,19 @@
 using CommonServiceLocator;
 using Prism.Autofac.Mutable.Wpf.Ioc;
 using Prism.Autofac.Mutable.Wpf.Modules;
+using Prism.Autofac.Mutable.Wpf.Regions;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
-using Prism.Unity.Regions;
 using AutofacCore = Autofac.Core;
 
 namespace Prism.Autofac.Mutable.Wpf
 {
     public abstract class PrismApplication : PrismApplicationBase
     {
-
-        private AutofacContainerExtension _autofacContainerExtension;
-
         protected override IContainerExtension CreateContainerExtension()
         {
-            _autofacContainerExtension = new AutofacContainerExtension();
-            return _autofacContainerExtension;
+            return new AutofacContainerExtension();
         }
 
         protected override void RegisterRequiredTypes(IContainerRegistry containerRegistry)
@@ -34,6 +30,7 @@ namespace Prism.Autofac.Mutable.Wpf
             base.RegisterFrameworkExceptionTypes();
             ExceptionExtensions.RegisterFrameworkExceptionType(typeof(AutofacCore.DependencyResolutionException));
             ExceptionExtensions.RegisterFrameworkExceptionType(typeof(AutofacCore.Registration.ComponentNotRegisteredException));
+            ExceptionExtensions.RegisterFrameworkExceptionType(typeof(AutofacContainerRegistryFinalizedException));
         }
     }
 }
