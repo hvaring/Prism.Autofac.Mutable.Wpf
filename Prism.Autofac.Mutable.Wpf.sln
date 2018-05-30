@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E7B008BE
 		Prism.Autofac.Mutable.Wpf\Prism.Autofac.Mutable.Wpf.nuspec = Prism.Autofac.Mutable.Wpf\Prism.Autofac.Mutable.Wpf.nuspec
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApplication", "Samples\DemoApplication\DemoApplication.csproj", "{ED8A5853-151D-4D41-BA1C-94AB2574B15E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D28FAB65-065C-4915-8A3A-780E8718CB2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,12 +32,17 @@ Global
 		{1493D219-0117-4A96-8D06-722223D13793}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1493D219-0117-4A96-8D06-722223D13793}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1493D219-0117-4A96-8D06-722223D13793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED8A5853-151D-4D41-BA1C-94AB2574B15E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED8A5853-151D-4D41-BA1C-94AB2574B15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED8A5853-151D-4D41-BA1C-94AB2574B15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED8A5853-151D-4D41-BA1C-94AB2574B15E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1493D219-0117-4A96-8D06-722223D13793} = {B4C78CF0-3656-4D63-9432-E8D0616EF6D6}
+		{ED8A5853-151D-4D41-BA1C-94AB2574B15E} = {D28FAB65-065C-4915-8A3A-780E8718CB2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {353CA245-A501-4F71-886D-193703E323A8}
