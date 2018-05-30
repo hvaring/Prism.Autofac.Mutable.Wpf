@@ -31,7 +31,7 @@ The `AutofacContainerRegistry` is an `IContainerRegistry`, which is what `IModul
 Your application should inherit from the abstract class `PrismApplication`, which in turn inherits from `PrismApplicationBase`. See [7.1.0-pre1 release notes](https://github.com/PrismLibrary/Prism/releases/tag/7.1.0-pre1) for more information about that.
 
 ### Module registration
-Your modules will receive an `IContainerRegistry` to use when registering types. This follows the new IoC concent for Prism.
+Your modules will receive an `IContainerRegistry` to use when registering types. This follows the new IoC concept for Prism.
 
 ### Limitations
 The interface `IContainerExtension` gets registered by `PrismApplicationBase`. If you resolve this interface and try to register new types after the initial container has been built, a `AutofacContainerRegistryFinalizedException` is thrown. The correct way to do it (outside of a module) is to resolve `IMutableContainer` and use the `RegisterTypes` method.
