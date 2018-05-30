@@ -28,7 +28,7 @@ mutableContainer.RegisterTypes(builder =>
 The `AutofacContainerRegistry` is an `IContainerRegistry`, which is what `IModule` expects.
 
 ## How to use it
-Your application should inherit from the abstract class `PrismApplication`, which in turn inherits from `PrismApplicationBase`. See [7.1.0-pre1 release notes](https://github.com/PrismLibrary/Prism/releases/tag/7.1.0-pre1) for more information about that.
+Your application should inherit from the abstract class `PrismApplication`, which in turn inherits from `PrismApplicationBase`. See [[XF] Container abstractions - PrismApplication restructure (Breaking) #1288](https://github.com/PrismLibrary/Prism/pull/1288) for more information about that.
 
 ### Module registration
 Your modules will receive an `IContainerRegistry` to use when registering types. This follows the new IoC concept for Prism.
