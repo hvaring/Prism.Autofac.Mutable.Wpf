@@ -9,7 +9,7 @@
     <licenseUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Extends the official Prism Autofac with module support</description>
+    <description>A Prism Autofac implementation with module support</description>
     <copyright>Copyright 2018</copyright>
     <tags>prism mvvm wpf xaml autofac</tags>
     <dependencies>
