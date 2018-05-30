@@ -9,6 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B4C78CF0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prism.Autofac.Mutable.Wpf.Tests", "Tests\Prism.Autofac.Mutable.Wpf.Tests\Prism.Autofac.Mutable.Wpf.Tests.csproj", "{1493D219-0117-4A96-8D06-722223D13793}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E7B008BE-7252-4CD8-BC1F-2008D3FDC7F5}"
+	ProjectSection(SolutionItems) = preProject
+		Prism.Autofac.Mutable.Wpf\Prism.Autofac.Mutable.Wpf.nuspec = Prism.Autofac.Mutable.Wpf\Prism.Autofac.Mutable.Wpf.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

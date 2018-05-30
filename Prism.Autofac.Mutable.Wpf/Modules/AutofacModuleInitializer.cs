@@ -30,16 +30,14 @@ namespace Prism.Autofac.Mutable.Wpf.Modules
                 moduleInstance = this.CreateModule(moduleInfo);
                 if (moduleInstance != null)
                 {
-                    //TODO: wait for WPF 7.0 to be released (not pre-version). Then uncomment code.
                     var mutableContainer = _containerExtension.GetMutableContainer();
                     mutableContainer.RegisterTypes(builder =>
                     {
-                        
                         var registry = new AutofacContainerRegistry(builder);
-                        //moduleInstance.RegisterTypes(registry);
+                        moduleInstance.RegisterTypes(registry);
                     });
                     
-                    //moduleInstance.OnInitialized(_containerExtension);
+                    moduleInstance.OnInitialized(_containerExtension);
                 }
             }
             catch (Exception ex)
@@ -115,8 +113,7 @@ namespace Prism.Autofac.Mutable.Wpf.Modules
             Type moduleType = Type.GetType(typeName);
             if (moduleType == null)
             {
-                //TODO: fix
-                //throw new ModuleInitializeException(string.Format(CultureInfo.CurrentCulture, Prism.Properties.Resources.FailedToGetType, typeName));
+                throw new ModuleInitializeException(string.Format(CultureInfo.CurrentCulture, Properties.Resources.FailedToGetType, typeName));
             }
 
             return (IModule)_containerExtension.Resolve(moduleType);
