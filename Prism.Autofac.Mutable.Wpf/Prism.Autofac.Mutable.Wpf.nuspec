@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.0.0-pre</version>
+    <version>1.0.0.1-pre</version>
     <title>Autofac for Prism 7 with module support</title>
     <authors>Fredrik Hvaring</authors>
     <owners>Fredrik Hvaring</owners>
