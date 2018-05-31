@@ -4,7 +4,7 @@ This library offers an alternative to the official Prism.Autofac library for WPF
 
 ## How it works
 
-While `ContainerBuilder.Update` is obsolete, Autofac allows you to dynamically add an `IRegistrationSource` to an existing container. This is also one of the workarounds mentioned in [Autofac ContainerBuilder.Update Obsolete](https://github.com/PrismLibrary/Prism/issues/969#issuecomment-291617882). Adding new `IRegistrationSource`s is handled by a wrapper interface, `IMutableConctainer`.
+While `ContainerBuilder.Update` is obsolete, Autofac allows you to dynamically add an `IRegistrationSource` to an existing container. This is also one of the workarounds mentioned in [Autofac ContainerBuilder.Update Obsolete](https://github.com/PrismLibrary/Prism/issues/969#issuecomment-291617882). Adding new `IRegistrationSource`s is handled by a wrapper interface, `IMutableContainer`.
 ```
 public interface IMutableContainer : IContainer
 {
