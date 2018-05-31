@@ -4,14 +4,14 @@ This library offers an alternative to the official Prism.Autofac library for WPF
 
 ## How it works
 
-While `ContainerBuilder.Update` is obsolete, Autofac allows you to create child scopes and include any new registrations. This is also one of the workarounds mentioned in [Discussion: ContainerBuilder.Update Marked Obsolete](https://github.com/autofac/Autofac/issues/811). Tracking and returning the latest lifetime scope is handled by a wrapper interface, `IMutableConctainer`.
+While `ContainerBuilder.Update` is obsolete, Autofac allows you to dynamically add an `IRegistrationSource` to an existing container. This is also one of the workarounds mentioned in [Autofac ContainerBuilder.Update Obsolete](https://github.com/PrismLibrary/Prism/issues/969#issuecomment-291617882). Adding new `IRegistrationSource`s is handled by a wrapper interface, `IMutableConctainer`.
 ```
 public interface IMutableContainer : IContainer
 {
     void RegisterTypes(Action<ContainerBuilder> builder);
 }
 ```
-Internally, the method `RegisterTypes` creates a new child scope and routes all container-requests to the new scope. `IMutableContainer` is registered as `IComponentContext`, `IContainer` and `ILifetimeScope`.
+Internally, the method `RegisterTypes` creates a new container with all the new registrations, and adds itself as an `ExternalRegistrySource` to the existing container. `IMutableContainer` is registered as `IContainer`.
 
 The `AutofacRegionNavigationContentLoader` and `AutofacServiceLocatorAdapter` are based completely on the classes by the same name in `Prism.Autofac`, although they take an `ILifetimeScope` instead of an `IContainer` as input.
 
