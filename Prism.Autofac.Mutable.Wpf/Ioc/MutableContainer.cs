@@ -11,39 +11,41 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
     internal class MutableContainer : Disposable, IMutableContainer, IServiceProvider
     {
         private readonly IContainer _container;
-        private readonly List<ILifetimeScope> _managedChildScopes;
+        private readonly ILifetimeScope _lifetimeScope;
+        private readonly List<IContainer> _additionalRegistrations;
 
-        private ILifetimeScope _currentLifetimeScope;
-
-        internal MutableContainer(IContainer container)
+        internal MutableContainer(ContainerBuilder builder)
         {
-            _container = container;
-            _managedChildScopes = new List<ILifetimeScope>();
-            _currentLifetimeScope = container.Resolve<ILifetimeScope>();
-            //Initialize child scope and register self.
-            RegisterTypes(b => b.RegisterInstance(this)
-                .As<IMutableContainer>()
-                .As<IContainer>());
+            builder.RegisterInstance(this).As<IMutableContainer>().As<IContainer>().SingleInstance();
+            _container = builder.Build();
+            _additionalRegistrations = new List<IContainer>();
+            _lifetimeScope = _container.Resolve<ILifetimeScope>();
+            _lifetimeScope.ChildLifetimeScopeBeginning += OnChildLifetimeScopeBeginning;
+            _lifetimeScope.CurrentScopeEnding += OnCurrentScopeEnding;
+            _lifetimeScope.ResolveOperationBeginning += OnResolveOperationBeginning;
         }
 
+        /// <summary>
+        /// Registers additional types to be made available in the container.
+        /// </summary>
+        /// <param name="configurationAction">Configuration for the <see cref="ContainerBuilder"/></param>
         public void RegisterTypes(Action<ContainerBuilder> configurationAction)
         {
             if (configurationAction == null)
                 throw new ArgumentNullException(nameof(configurationAction));
 
-            _currentLifetimeScope.ChildLifetimeScopeBeginning -= OnChildLifetimeScopeBeginning;
-            _currentLifetimeScope.CurrentScopeEnding -= OnCurrentScopeEnding;
-            _currentLifetimeScope.ResolveOperationBeginning -= OnResolveOperationBeginning;
-            _currentLifetimeScope = _currentLifetimeScope.BeginLifetimeScope(builder =>
-            {
-                builder.RegisterInstance(this).As<ILifetimeScope>().As<IComponentContext>();
-                configurationAction(builder);
-            });
-            _managedChildScopes.Add(_currentLifetimeScope);
+            var builder = new ContainerBuilder();
+            configurationAction(builder);
+            var container = builder.Build();
+            _additionalRegistrations.Add(container);
 
-            _currentLifetimeScope.ChildLifetimeScopeBeginning += OnChildLifetimeScopeBeginning;
-            _currentLifetimeScope.CurrentScopeEnding += OnCurrentScopeEnding;
-            _currentLifetimeScope.ResolveOperationBeginning += OnResolveOperationBeginning;
+            // We need to re-add components back to the root scope.
+            // This is important so that the new registrations are available, 
+            // for example when resolving singletons that have not yet been resolved.
+            // Without this, singletons would not get any of the registrations done with RegisterTypes, 
+            // even if they were resolved after additional registrations.
+            var registrationSource = new ExternalRegistrySource(container.ComponentRegistry);
+            _lifetimeScope.ComponentRegistry.AddRegistrationSource(registrationSource);
         }
 
         private void OnResolveOperationBeginning(object sender, ResolveOperationBeginningEventArgs e)
@@ -63,52 +65,52 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
 
         public ILifetimeScope BeginLifetimeScope()
         {
-            return _currentLifetimeScope.BeginLifetimeScope();
+            return _lifetimeScope.BeginLifetimeScope();
         }
 
         public ILifetimeScope BeginLifetimeScope(object tag)
         {
-            return _currentLifetimeScope.BeginLifetimeScope(tag);
+            return _lifetimeScope.BeginLifetimeScope(tag);
         }
 
         public ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction)
         {
-            return _currentLifetimeScope.BeginLifetimeScope(configurationAction);
+            return _lifetimeScope.BeginLifetimeScope(configurationAction);
         }
 
         public ILifetimeScope BeginLifetimeScope(object tag, Action<ContainerBuilder> configurationAction)
         {
-            return _currentLifetimeScope.BeginLifetimeScope(tag, configurationAction);
+            return _lifetimeScope.BeginLifetimeScope(tag, configurationAction);
         }
-        
+
         public object ResolveComponent(IComponentRegistration registration, IEnumerable<Parameter> parameters)
         {
-            return _currentLifetimeScope.ResolveComponent(registration, parameters);
+            return _lifetimeScope.ResolveComponent(registration, parameters);
         }
 
-        public IComponentRegistry ComponentRegistry => _currentLifetimeScope.ComponentRegistry;
+        public IComponentRegistry ComponentRegistry => _lifetimeScope.ComponentRegistry;
 
-        
+
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 _container.Dispose();
-                _managedChildScopes.ForEach(s => s.Dispose());
+                _additionalRegistrations.ForEach(s => s.Dispose());
             }
             base.Dispose(disposing);
         }
 
-        public IDisposer Disposer => _currentLifetimeScope.Disposer;
-        public object Tag => _currentLifetimeScope.Tag;
+        public IDisposer Disposer => _lifetimeScope.Disposer;
+        public object Tag => _lifetimeScope.Tag;
         public event EventHandler<LifetimeScopeBeginningEventArgs> ChildLifetimeScopeBeginning;
         public event EventHandler<LifetimeScopeEndingEventArgs> CurrentScopeEnding;
         public event EventHandler<ResolveOperationBeginningEventArgs> ResolveOperationBeginning;
 
         public object GetService(Type serviceType)
         {
-            return ((IServiceProvider)_currentLifetimeScope).GetService(serviceType);
+            return ((IServiceProvider)_lifetimeScope).GetService(serviceType);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using FluentAssertions;
 using NUnit.Framework;
@@ -14,18 +16,13 @@ namespace Prism.Autofac.Mutable.Wpf.Tests
         public void Initialize()
         {
             var builder = new ContainerBuilder();
-            var container = builder.Build();
-
-            _mutable = new MutableContainer(container);
+            builder.RegisterType<Singleton>().SingleInstance();
+            _mutable = new MutableContainer(builder);
         }
 
-
         [Test]
-        public void MutableContainerShouldBeRegisteredAsAutofacComponents()
+        public void MutableContainerShouldBeRegisteredAsContainer()
         {
-
-            _mutable.Resolve<ILifetimeScope>().Should().Be(_mutable);
-            _mutable.Resolve<IComponentContext>().Should().Be(_mutable);
             _mutable.Resolve<IContainer>().Should().Be(_mutable);
         }
 
@@ -39,8 +36,6 @@ namespace Prism.Autofac.Mutable.Wpf.Tests
         public void MutableContainerShouldRetainSelfRegistrationsOnRegisterTypes()
         {
             _mutable.RegisterTypes(b => {});
-            _mutable.Resolve<ILifetimeScope>().Should().Be(_mutable);
-            _mutable.Resolve<IComponentContext>().Should().Be(_mutable);
             _mutable.Resolve<IContainer>().Should().Be(_mutable);
         }
 
@@ -58,6 +53,82 @@ namespace Prism.Autofac.Mutable.Wpf.Tests
             _mutable.Dispose();
             Action resolveAction = () => _mutable.Resolve<INewClassRegistration>();
             resolveAction.Should().Throw<ObjectDisposedException>();
+        }
+
+        [Test]
+        public void SingletonShouldGetAllRegistrationsWhenResolvedAfterNewRegistrations()
+        {
+            _mutable.RegisterTypes(builder =>
+            {
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+            });
+            var singleton = _mutable.Resolve<Singleton>();
+            singleton.Registrations.Count().Should().Be(3);
+        }
+
+        [Test]
+        public void SingletonShouldNotGetAllRegistrationsWhenResolvedBeforeNewRegistrations()
+        {
+            var singleton = _mutable.Resolve<Singleton>();
+            singleton.Registrations.Count().Should().Be(0);
+            _mutable.RegisterTypes(builder =>
+            {
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+            });
+            singleton = _mutable.Resolve<Singleton>();
+            singleton.Registrations.Count().Should().Be(0);
+        }
+
+        [Test]
+        public void LifetimeScopesResolvedInNewRegistrationsShouldReturnOriginalScope()
+        {
+            var scope = _mutable.Resolve<ILifetimeScope>();
+            _mutable.RegisterTypes(builder => builder.RegisterType<ClassWithLifetimeScope>());
+            var classWithScope = _mutable.Resolve<ClassWithLifetimeScope>();
+            classWithScope.Scope.Should().Be(scope);
+        }
+
+        [Test]
+        public void TypesInNewRegistrationsShouldBeAbleToResolveOriginalComponents()
+        {
+            var singleton = _mutable.Resolve<Singleton>();
+            _mutable.RegisterTypes(builder => builder.RegisterType<ClassWithSingleton>());
+            var classWithSingleton = _mutable.Resolve<ClassWithSingleton>();
+            classWithSingleton.Singleton.Should().Be(singleton);
+        }
+
+        private class ClassWithSingleton
+        {
+            public Singleton Singleton { get; }
+
+            public ClassWithSingleton(Singleton singleton)
+            {
+                Singleton = singleton;
+            }
+        }
+
+        private class ClassWithLifetimeScope
+        {
+            public ILifetimeScope Scope { get; }
+
+            public ClassWithLifetimeScope(ILifetimeScope scope)
+            {
+                Scope = scope;
+            }
+        }
+
+        private class Singleton
+        {
+            public IEnumerable<INewClassRegistration> Registrations { get; }
+
+            public Singleton(IEnumerable<INewClassRegistration> registrations)
+            {
+                Registrations = registrations;
+            }
         }
 
         private class NewClassRegistration : INewClassRegistration

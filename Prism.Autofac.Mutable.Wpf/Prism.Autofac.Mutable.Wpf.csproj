@@ -67,6 +67,7 @@
     <Compile Include="Ioc\AutofacContainerRegistryFinalizedException.cs" />
     <Compile Include="Ioc\AutofacContainerRegistry.cs" />
     <Compile Include="AutofacServiceLocatorAdapter.cs" />
+    <Compile Include="Ioc\ExternalRegistrySource.cs" />
     <Compile Include="Ioc\IAutofacContainerExtension.cs" />
     <Compile Include="Ioc\IAutofacContainerRegistry.cs" />
     <Compile Include="Ioc\IMutableContainer.cs" />
