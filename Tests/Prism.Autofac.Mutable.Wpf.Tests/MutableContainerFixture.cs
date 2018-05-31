@@ -14,9 +14,7 @@ namespace Prism.Autofac.Mutable.Wpf.Tests
         public void Initialize()
         {
             var builder = new ContainerBuilder();
-            var container = builder.Build();
-
-            _mutable = new MutableContainer(container);
+            _mutable = new MutableContainer(builder);
         }
 
 

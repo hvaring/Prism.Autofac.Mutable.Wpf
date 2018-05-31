@@ -20,8 +20,7 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
                 return;
 
             Builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
-            var container = Builder.Build();
-            Instance = new MutableContainer(container);
+            Instance = new MutableContainer(Builder);
             FinalizeRegistry();
         }
 
