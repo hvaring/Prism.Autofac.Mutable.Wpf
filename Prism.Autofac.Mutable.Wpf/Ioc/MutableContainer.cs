@@ -11,16 +11,14 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
     internal class MutableContainer : Disposable, IMutableContainer, IServiceProvider
     {
         private readonly IContainer _container;
-        private readonly IContainer _additionalRegistrationsContainer;
         private readonly ILifetimeScope _lifetimeScope;
-        private readonly List<ILifetimeScope> _managedChildScopes;
+        private readonly List<IContainer> _additionalRegistrations;
 
         internal MutableContainer(ContainerBuilder builder)
         {
             builder.RegisterInstance(this).As<IMutableContainer>().As<IContainer>().SingleInstance();
             _container = builder.Build();
-            _additionalRegistrationsContainer = new ContainerBuilder().Build();
-            _managedChildScopes = new List<ILifetimeScope>();
+            _additionalRegistrations = new List<IContainer>();
             _lifetimeScope = _container.Resolve<ILifetimeScope>();
             _lifetimeScope.ChildLifetimeScopeBeginning += OnChildLifetimeScopeBeginning;
             _lifetimeScope.CurrentScopeEnding += OnCurrentScopeEnding;
@@ -36,13 +34,17 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
             if (configurationAction == null)
                 throw new ArgumentNullException(nameof(configurationAction));
 
-            var childScope = _additionalRegistrationsContainer.BeginLifetimeScope(configurationAction);
-            _managedChildScopes.Add(childScope);
+            var builder = new ContainerBuilder();
+            configurationAction(builder);
+            var container = builder.Build();
+            _additionalRegistrations.Add(container);
 
             // We need to re-add components back to the root scope.
-            // This is important so that the new registrations are available when resolving for example singletons that have not yet been resolved.
-            // Without this, singletons would not get any of the registrations done with RegisterTypes, even if they were resolved after additional registrations.
-            var registrationSource = new ExternalRegistrySource(childScope.ComponentRegistry);
+            // This is important so that the new registrations are available, 
+            // for example when resolving singletons that have not yet been resolved.
+            // Without this, singletons would not get any of the registrations done with RegisterTypes, 
+            // even if they were resolved after additional registrations.
+            var registrationSource = new ExternalRegistrySource(container.ComponentRegistry);
             _lifetimeScope.ComponentRegistry.AddRegistrationSource(registrationSource);
         }
 
@@ -95,8 +97,7 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
             if (disposing)
             {
                 _container.Dispose();
-                _additionalRegistrationsContainer.Dispose();
-                _managedChildScopes.ForEach(s => s.Dispose());
+                _additionalRegistrations.ForEach(s => s.Dispose());
             }
             base.Dispose(disposing);
         }
