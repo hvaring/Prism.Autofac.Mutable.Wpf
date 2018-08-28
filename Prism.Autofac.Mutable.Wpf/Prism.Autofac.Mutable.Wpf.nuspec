@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.0.1-pre</version>
+    <version>1.0.0.2-pre</version>
     <title>Autofac for Prism 7 with module support</title>
     <authors>Fredrik Hvaring</authors>
     <owners>Fredrik Hvaring</owners>
@@ -15,7 +15,7 @@
     <dependencies>
       <group targetFramework=".NETFramework4.5">
         <dependency id="Autofac" version="4.6.2" />
-        <dependency id="Prism.Wpf" version="7.1.0.123-pre" />
+        <dependency id="Prism.Wpf" version="7.1.0.172-pre" />
       </group>
     </dependencies>
   </metadata>
