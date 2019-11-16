@@ -10,11 +10,11 @@
     <Version>2.0.0</Version>
     <Copyright>Copyright @ 2019</Copyright>
     <PackageProjectUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Fredrik Hvaring</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
