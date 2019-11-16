@@ -17,6 +17,7 @@ namespace Prism.Autofac.Mutable.Wpf.Tests
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<Singleton>().SingleInstance();
+            builder.RegisterType<FuncSingleton>().SingleInstance();
             _mutable = new MutableContainer(builder);
         }
 
@@ -101,6 +102,20 @@ namespace Prism.Autofac.Mutable.Wpf.Tests
             classWithSingleton.Singleton.Should().Be(singleton);
         }
 
+        [Test]
+        public void FuncsInSingletonsShouldReturnNewRegistrations()
+        {
+            var funcSingleton = _mutable.Resolve<FuncSingleton>();
+            funcSingleton.Registrations.Count().Should().Be(0);
+            _mutable.RegisterTypes(builder =>
+            {
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+                builder.RegisterType<NewClassRegistration>().As<INewClassRegistration>();
+            });
+            funcSingleton.Registrations.Count().Should().Be(3);
+        }
+
         private class ClassWithSingleton
         {
             public Singleton Singleton { get; }
@@ -108,6 +123,17 @@ namespace Prism.Autofac.Mutable.Wpf.Tests
             public ClassWithSingleton(Singleton singleton)
             {
                 Singleton = singleton;
+            }
+        }
+
+        private class FuncSingleton
+        {
+            private readonly Func<IEnumerable<INewClassRegistration>> _registrationFactory;
+            public IEnumerable<INewClassRegistration> Registrations => _registrationFactory();
+
+            public FuncSingleton(Func<IEnumerable<INewClassRegistration>> registrationFactory)
+            {
+                _registrationFactory = registrationFactory;
             }
         }
 

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>net45;netcoreapp3.0</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <Description>A Prism Autofac implementation for Prism 7.</Description>
+    <PackageTags>prism;mvvm;xaml;wpf;autofac</PackageTags>
+    <Version>2.0.0</Version>
+    <Copyright>Copyright @ 2019</Copyright>
+    <PackageProjectUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf/blob/master/LICENSE</PackageLicenseUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Fredrik Hvaring</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19554-01" PrivateAssets="All" />
+  </ItemGroup>
+</Project>

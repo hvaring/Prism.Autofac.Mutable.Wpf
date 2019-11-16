@@ -1,10 +1,12 @@
 # Prism.Autofac.Mutable.Wpf
 
-This library offers an alternative to the official Prism.Autofac library for WPF that supports modules. Module support for Autofac in Prism has been removed in Prism WPF 7.0 due to Autofac's `ContainerBuilder.Update` being marked as obsolete.
+This library provides [Autofac](https://github.com/autofac/Autofac) support for [Prism](https://github.com/PrismLibrary/Prism/). Support for Autofac in Prism has been removed in Prism WPF 7.0 due to Autofac's `ContainerBuilder.Update` being marked as obsolete.
+
+The library supports both .NET Core 3.0 and .NET Framework 4.5.
 
 ## How it works
 
-While `ContainerBuilder.Update` is obsolete, Autofac allows you to dynamically add an `IRegistrationSource` to an existing container. This is also one of the workarounds mentioned in [Autofac ContainerBuilder.Update Obsolete](https://github.com/PrismLibrary/Prism/issues/969#issuecomment-291617882). Adding new `IRegistrationSource`s is handled by a wrapper interface, `IMutableContainer`.
+While `ContainerBuilder.Update` is obsolete, Autofac allows you to dynamically add an `IRegistrationSource` to an existing container. Adding new `IRegistrationSource`s is handled by a wrapper interface, `IMutableContainer`.
 ```
 public interface IMutableContainer : IContainer
 {
@@ -28,10 +30,11 @@ mutableContainer.RegisterTypes(builder =>
 The `AutofacContainerRegistry` is an `IContainerRegistry`, which is what `IModule` expects.
 
 ## How to use it
-Your application should inherit from the abstract class `PrismApplication`, which in turn inherits from `PrismApplicationBase`. See [[XF] Container abstractions - PrismApplication restructure (Breaking) #1288](https://github.com/PrismLibrary/Prism/pull/1288) for more information about that.
+Your application should inherit from the abstract class `PrismApplication`, which in turn inherits from `PrismApplicationBase`.
 
 ### Module registration
 Your modules will receive an `IContainerRegistry` to use when registering types. This follows the new IoC concept for Prism.
 
 ### Limitations
-The interface `IContainerExtension` gets registered by `PrismApplicationBase`. If you resolve this interface and try to register new types after the initial container has been built, a `AutofacContainerRegistryFinalizedException` is thrown. The correct way to do it (outside of a module) is to resolve `IMutableContainer` and use the `RegisterTypes` method.
+- The interface `IContainerExtension` gets registered by `PrismApplicationBase`. If you resolve this interface and try to register new types after the initial container has been built, a `AutofacContainerRegistryFinalizedException` is thrown. The correct way to do it (outside of a module) is to resolve `IMutableContainer` and use the `RegisterTypes` method.
+- Calling `IsRegistered` will return false while building the container. Registrations are not available until the `ContainerBuilder` has been built. Modules can check `IsRegistered` for all types registered from `PrismApplication`, and for types registered by already initialized modules.

@@ -18,7 +18,7 @@ namespace Prism.Autofac.Mutable.Wpf.Modules
             _loggerFacade = loggerFacade;
         }
 
-        public void Initialize(ModuleInfo moduleInfo)
+        public void Initialize(IModuleInfo moduleInfo)
         {
             if (moduleInfo == null)
                 throw new ArgumentNullException(nameof(moduleInfo));
@@ -33,7 +33,7 @@ namespace Prism.Autofac.Mutable.Wpf.Modules
                     var mutableContainer = _containerExtension.GetMutableContainer();
                     mutableContainer.RegisterTypes(builder =>
                     {
-                        var registry = new AutofacContainerRegistry(builder);
+                        var registry = new AutofacContainerRegistry(builder, mutableContainer);
                         moduleInstance.RegisterTypes(registry);
                         registry.FinalizeRegistry();
                     });
@@ -60,7 +60,7 @@ namespace Prism.Autofac.Mutable.Wpf.Modules
         /// <param name="assemblyName">The assembly name.</param>
         /// <param name="exception">The exception thrown that is the cause of the current error.</param>
         /// <exception cref="ModuleInitializeException"></exception>
-        public virtual void HandleModuleInitializationError(ModuleInfo moduleInfo, string assemblyName, Exception exception)
+        public virtual void HandleModuleInitializationError(IModuleInfo moduleInfo, string assemblyName, Exception exception)
         {
             if (moduleInfo == null)
                 throw new ArgumentNullException(nameof(moduleInfo));
@@ -96,7 +96,7 @@ namespace Prism.Autofac.Mutable.Wpf.Modules
         /// </summary>
         /// <param name="moduleInfo">The module to create.</param>
         /// <returns>A new instance of the module specified by <paramref name="moduleInfo"/>.</returns>
-        protected virtual IModule CreateModule(ModuleInfo moduleInfo)
+        protected virtual IModule CreateModule(IModuleInfo moduleInfo)
         {
             if (moduleInfo == null)
                 throw new ArgumentNullException(nameof(moduleInfo));

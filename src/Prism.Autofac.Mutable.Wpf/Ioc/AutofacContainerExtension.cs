@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 
@@ -6,7 +7,6 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
 {
     public class AutofacContainerExtension : AutofacContainerRegistry, IAutofacContainerExtension
     {
-        public bool SupportsModules => true;
         public IMutableContainer Instance { get; private set; }
 
         public AutofacContainerExtension()
@@ -21,6 +21,7 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
 
             Builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             Instance = new MutableContainer(Builder);
+            SetLifetimeScope(Instance);
             FinalizeRegistry();
         }
 
@@ -29,14 +30,19 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
             return Instance.Resolve(type);
         }
 
+        public object Resolve(Type type, params (Type Type, object Instance)[] parameters)
+        {
+            return Instance.Resolve(type, parameters.Select(p => new TypedParameter(p.Type, p.Instance)));
+        }
+
         public object Resolve(Type type, string name)
         {
             return Instance.ResolveNamed(name, type);
         }
 
-        public object ResolveViewModelForView(object view, Type viewModelType)
+        public object Resolve(Type type, string name, params (Type Type, object Instance)[] parameters)
         {
-            return Instance.Resolve(viewModelType);
+            return Instance.ResolveNamed(name, type, parameters.Select(p => new TypedParameter(p.Type, p.Instance)));
         }
     }
 }
