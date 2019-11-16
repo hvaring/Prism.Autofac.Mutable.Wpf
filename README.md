@@ -1,5 +1,7 @@
 # Prism.Autofac.Mutable.Wpf
 
+[![NuGetShield]][NuGet]
+
 This library provides [Autofac](https://github.com/autofac/Autofac) support for [Prism](https://github.com/PrismLibrary/Prism/). Support for Autofac in Prism has been removed in Prism WPF 7.0 due to Autofac's `ContainerBuilder.Update` being marked as obsolete.
 
 The library supports both .NET Core 3.0 and .NET Framework 4.5.
@@ -38,3 +40,6 @@ Your modules will receive an `IContainerRegistry` to use when registering types.
 ### Limitations
 - The interface `IContainerExtension` gets registered by `PrismApplicationBase`. If you resolve this interface and try to register new types after the initial container has been built, a `AutofacContainerRegistryFinalizedException` is thrown. The correct way to do it (outside of a module) is to resolve `IMutableContainer` and use the `RegisterTypes` method.
 - Calling `IsRegistered` will return false while building the container. Registrations are not available until the `ContainerBuilder` has been built. Modules can check `IsRegistered` for all types registered from `PrismApplication`, and for types registered by already initialized modules.
+
+[NuGet]: https://www.nuget.org/packages/Prism.Autofac.Mutable.Wpf/
+[NuGetShield]: https://img.shields.io/nuget/vpre/Prism.Autofac.Mutable.Wpf.svg
