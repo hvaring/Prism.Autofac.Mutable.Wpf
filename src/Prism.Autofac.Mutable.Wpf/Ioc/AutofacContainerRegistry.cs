@@ -18,6 +18,7 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
             : this(builder)
         {
             _lifetimeScope = lifetimeScope;
+            
         }
 
         public void FinalizeRegistry()

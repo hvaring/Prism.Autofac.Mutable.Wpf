@@ -26,6 +26,7 @@ namespace DemoApplication
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            Console.WriteLine(this.Container);
             containerRegistry.RegisterForNavigation<TestControl>();
         }
 
