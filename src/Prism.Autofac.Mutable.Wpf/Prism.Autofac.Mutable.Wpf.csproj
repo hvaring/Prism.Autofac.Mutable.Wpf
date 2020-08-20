@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFrameworks>net45;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp3.0</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <Description>A Prism Autofac implementation for Prism 7.</Description>
     <PackageTags>prism;mvvm;xaml;wpf;autofac</PackageTags>
@@ -18,8 +18,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.6.2" />
-    <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
+    <PackageReference Include="Autofac" Version="5.1.2" />
+    <PackageReference Include="Prism.Wpf" Version="7.2.0.1422" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19554-01" PrivateAssets="All" />
   </ItemGroup>
 </Project>

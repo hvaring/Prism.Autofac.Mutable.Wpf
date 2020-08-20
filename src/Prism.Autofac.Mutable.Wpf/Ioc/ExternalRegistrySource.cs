@@ -5,6 +5,7 @@ using Autofac.Core.Registration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 
 namespace Prism.Autofac.Mutable.Wpf.Ioc
 {
@@ -25,9 +26,7 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
         /// <param name="registry">Component registry to pull registrations from.</param>
         public ExternalRegistrySource(IComponentRegistry registry)
         {
-            if (registry == null) throw new ArgumentNullException(nameof(registry));
-
-            _registry = registry;
+            _registry = registry ?? throw new ArgumentNullException(nameof(registry));
         }
 
         /// <summary>
@@ -37,7 +36,8 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
         /// <param name="service">The service that was requested.</param>
         /// <param name="registrationAccessor">A function that will return existing registrations for a service.</param>
         /// <returns>Registrations providing the service.</returns>
-        public IEnumerable<IComponentRegistration> RegistrationsFor(Service service, Func<Service, IEnumerable<IComponentRegistration>> registrationAccessor)
+        public IEnumerable<IComponentRegistration> RegistrationsFor(Service service,
+            Func<Service, IEnumerable<IComponentRegistration>> registrationAccessor)
         {
             // Issue #475: This method was refactored significantly to handle
             // registrations made on the fly in parent lifetime scopes to correctly
@@ -61,11 +61,12 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
                     //        .CreateRegistration()
                     new ExternalComponentRegistration(
                         Guid.NewGuid(),
-                        new DelegateActivator(r.Activator.LimitType, (c, p) => c.ResolveComponent(r, p)),
+                        new DelegateActivator(r.Activator.LimitType,
+                            (c, p) => c.ResolveComponent(new ResolveRequest(service, r.Target, p))),
                         new CurrentScopeLifetime(),
                         InstanceSharing.None,
                         InstanceOwnership.ExternallyOwned,
-                        new[] { service },
+                        new[] {service},
                         r.Metadata,
                         r));
         }
@@ -83,9 +84,10 @@ namespace Prism.Autofac.Mutable.Wpf.Ioc
         private class ExternalComponentRegistration : ComponentRegistration
         {
             public ExternalComponentRegistration(Guid id, IInstanceActivator activator, IComponentLifetime lifetime, InstanceSharing sharing, InstanceOwnership ownership, IEnumerable<Service> services, IDictionary<string, object> metadata, IComponentRegistration target)
-                : base(id, activator, lifetime, sharing, ownership, services, metadata, target)
+                : base(id, activator, lifetime, sharing, ownership, services, metadata)
             {
             }
         }
+
     }
 }
