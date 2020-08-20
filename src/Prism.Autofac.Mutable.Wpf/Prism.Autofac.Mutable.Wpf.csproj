@@ -7,8 +7,8 @@
     <UseWPF>true</UseWPF>
     <Description>A Prism Autofac implementation for Prism 7.</Description>
     <PackageTags>prism;mvvm;xaml;wpf;autofac</PackageTags>
-    <Version>2.0.0</Version>
-    <Copyright>Copyright @ 2019</Copyright>
+    <Version>3.0.0</Version>
+    <Copyright>Copyright @ 2020</Copyright>
     <PackageProjectUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/hvaring/Prism.Autofac.Mutable.Wpf.git</RepositoryUrl>
